@@ -4,7 +4,8 @@ import "./style/style.scss"
 import * as bootstrap from 'bootstrap';
 import { renderHeader } from "./components/header";
 import { renderFooter } from "./components/footer";
-import { renderContent } from "./components/content";
+import { renderContentForTwo } from "./components/contentForTwo";
+import { renderContentForOne } from "./components/contentForOne";
 
  function doHeader(renderHeader){
   const divHeader = document.querySelector("#header");
@@ -13,7 +14,8 @@ import { renderContent } from "./components/content";
  }
 
  function doMain(cantCuadricula){
-   renderContent(cantCuadricula);  
+   //renderContentForTwo(cantCuadricula);  
+   renderContentForOne(cantCuadricula);  
  }
  
  function doFooter(renderFooter){
