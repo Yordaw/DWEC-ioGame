@@ -32,6 +32,10 @@ function renderContentForOne(cantCuadricula){
    //damos atributos
    juego1.setAttribute('class','juego');
 
+  //////////////////////////////////////////////////////////////////////////////
+  crearArray(5,5);
+
+  //////////////////////////////////////////////////////////////////////////////
    //bucle para rellenar
    for (let i = 0; i < cantCuadricula; i++) {
       const celda1 = document.createElement("div");
@@ -54,4 +58,23 @@ function renderContentForOne(cantCuadricula){
   divMain.append(areaTablero);
 
 
+}
+
+function crearArray(ancho,alto){
+  let filas = 3;
+  let columnas = 3;
+  let matriz = Array.from({ length: filas }, () => Array(columnas).fill(0));
+
+  console.log(matriz);
+
+  
+  /*
+  for(let i=0; i < ancho; i++){
+    for(let j=0; j < alto; j++){
+      
+      
+      
+    }
+  }
+  */
 }

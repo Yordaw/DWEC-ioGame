@@ -16,6 +16,12 @@ CasiNegro #060A0D -> Fondo tablero
 */
 
 // CSS Personalizado para el main
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 #main{
     //background-color: #f0EDE5;
     background-color: #1A1F24;
