@@ -19,7 +19,7 @@ function renderContent(cantCuadricula){
   const tituloPrincipal = document.createElement("h2");
   const tituloTablero1 = document.createElement("h2");
   const tituloTablero2 = document.createElement("h2");
-  tituloPrincipal.innerHTML=`Juego Yordan`;
+  tituloPrincipal.innerHTML=`Memory Game Yordan`;
   tituloTablero1.innerHTML= `Player 1`;
   tituloTablero2.innerHTML= `Player 2`;
    //se añade atributos al titulo principal
