@@ -1,0 +1,100 @@
+// Import all of Bootstrap's CSS
+@import "bootstrap/scss/bootstrap";
+
+//import * as bootstrap from 'bootstrap'
+
+// -- PALETA DE COLORES -- //
+/*
+Naranja #C5630C -> Titulo juego
+Beige/Crema #A47F6F ->
+VerdeLigero #415057 -> Fondo areaTablero
+GrisOscuro #33353A -> Borde areaTablero
+VerdeOscuro #1A1F24 ->
+VerdeCyprus #004643 -> Fondo areaTablero
+GrisSandDune #F0EDE5 ->
+CasiNegro #060A0D -> Fondo tablero
+*/
+
+// CSS Personalizado para el main
+#main{
+    //background-color: #f0EDE5;
+    background-color: #1A1F24;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+#tituloJuego{
+    margin: 20px 0px 0px 0px;
+    font-family: 'Impact','Tahoma';
+    font-size: 60px;
+    text-align: center;
+    color: #C5630C;
+    text-shadow: 2px 2px 17px rgb(0, 0, 0);
+}
+
+#areaTablero{
+    //background-color: #415057;
+    background-color: #004643;
+    margin: 50px 0px 50px 0px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:space-around;
+    padding: 50px;
+    border: 5px solid #33353A;
+    border-radius: 15px;
+}
+
+.tablero{
+    //background-color: #004643;
+    background-color: #060A0D;
+    margin: 5px 5px 5px 5px;
+    height: 600px;
+    width: 600px;
+    padding: 30px;
+    border: 5px solid #C5630C;
+    border-radius: 15px;
+    box-shadow: 5px 5px 15px #000000;
+}
+
+#tablUno h2{
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
+    color: rgb(255, 0, 85);
+}
+
+#tablDos h2{
+    text-align: center;
+    text-decoration: underline;
+    font-weight: bold;
+    color: rgb(255, 230, 0);
+}
+
+.juego{
+    margin-left: 15px;
+    display: grid;            
+    width: 500px;
+    height: 500px;
+
+    grid-template-columns: repeat(5, 1fr); 
+    grid-template-rows: repeat(5, 1fr);    
+}
+
+.juego div{
+     border: 1px solid rgb(0, 49, 182);
+     background-color: rgb(0, 2, 116);
+}
+//segun el event se marca o desmarca la celda
+#marcada{
+     border: 1px solid rgb(0, 49, 182);
+     background-color: rgb(116, 0, 0);
+}
+
+#desmarcada{
+     border: 1px solid rgb(0, 49, 182);
+     background-color: rgb(0, 2, 116);
+}
+
