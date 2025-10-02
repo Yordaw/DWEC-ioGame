@@ -33,9 +33,10 @@ function renderContentForOne(cantCuadricula){
    juego1.setAttribute('class','juego');
 
   //////////////////////////////////////////////////////////////////////////////
-  crearArray(5,5);
+  crearArray(5,5,juego1);
 
   //////////////////////////////////////////////////////////////////////////////
+  /*
    //bucle para rellenar
    for (let i = 0; i < cantCuadricula; i++) {
       const celda1 = document.createElement("div");
@@ -46,7 +47,7 @@ function renderContentForOne(cantCuadricula){
       juego1.append(celda1);
 
    }
-
+  */
    //metemos los divs de los juegos dentro de su tablero
    tablero.append(juego1);
 
@@ -60,21 +61,82 @@ function renderContentForOne(cantCuadricula){
 
 }
 
-function crearArray(ancho,alto){
-  let filas = 3;
-  let columnas = 3;
+/*
+function crearArray(ancho,alto,juego1){
+  let filas = ancho;
+  let columnas = alto;
   let matriz = Array.from({ length: filas }, () => Array(columnas).fill(0));
-
+  
   console.log(matriz);
 
-  
-  /*
-  for(let i=0; i < ancho; i++){
-    for(let j=0; j < alto; j++){
-      
-      
+  for(let i=0; i < matriz.length; i++){
+    for(let j=0; j < matriz.length; j++){
+      let divCelda = document.createElement("div");
+      let textoCeldas = document.createElement("h2");
+      textoCeldas.setAttribute('class','textoCeldas');
+      textoCeldas.innerHTML = '?';
+      divCelda.append(textoCeldas);
+      divCelda.setAttribute('class','divCelda');
+
+      matriz[i][j]= divCelda;
+      juego1.append(divCelda);
       
     }
+
   }
-  */
+
+}
+*/
+
+function crearArray(ancho, alto, juego1) {
+  let filas = ancho;
+  let columnas = alto;
+  let matriz = Array.from({ length: filas }, () => Array(columnas).fill(0));
+  
+  console.log(matriz);
+
+  for (let i = 0; i < matriz.length; i++) {
+    for (let j = 0; j < matriz[i].length; j++) {
+      // Crear el contenedor del flip
+      let flipContainer = document.createElement("div");
+      flipContainer.setAttribute('class', 'flip-container');
+      
+      // Crear la carta flip
+      let flipCard = document.createElement("div");
+      flipCard.setAttribute('class', 'flip-card');
+      
+      // Crear la cara frontal
+      let flipFront = document.createElement("div");
+      flipFront.setAttribute('class', 'flip-front');
+      let textoFront = document.createElement("h2");
+      textoFront.setAttribute('class', 'textoCeldas');
+      textoFront.innerHTML = '?';
+      flipFront.appendChild(textoFront);
+      
+      // Crear la cara trasera
+      let flipBack = document.createElement("div");
+      flipBack.setAttribute('class', 'flip-back');
+      let textoBack = document.createElement("h2");
+      textoBack.setAttribute('class', 'textoCeldas');
+      // Aquí puedes poner el contenido que quieras en el dorso, por ejemplo un número o un emoji
+      textoBack.innerHTML = 'X'; // Ejemplo
+      flipBack.appendChild(textoBack);
+      
+      // Añadir las caras a la carta
+      flipCard.appendChild(flipFront);
+      flipCard.appendChild(flipBack);
+      
+      // Añadir la carta al contenedor
+      flipContainer.appendChild(flipCard);
+      
+      // Añadir evento de clic para voltear
+      flipContainer.addEventListener('click', function() {
+        this.classList.toggle('flipped');
+      });
+      
+      // Asignar el contenedor a la matriz
+      matriz[i][j] = flipContainer;
+      juego1.appendChild(flipContainer);
+    }
+  }
 }
