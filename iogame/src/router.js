@@ -1,20 +1,19 @@
-//ESTO HAY QUE ACABARLO CON TODAS LAS PARTES DEL JUEGO.. TODOS EXPORT Y IMPORT AQUÍ...
+import { renderContentForOne } from "./components/contentForOne.js";
+import { renderLogin } from "./components/login.js";
+import { renderHome } from "./components/home.js";
 
-//import {renderContent} from "./components/content";
-/*
+export { router };
 const routes = new Map([
-    ['#',renderContent],//descomentar el segundo atributo... que es una funcion
-    ['#game',renderContent],
-    ['#login',renderLogin],
-])
+    ['#', renderHome],
+    ['#game', renderContentForOne],
+    ['#login', renderLogin],
+]);
 
-function router(route,container){ //TRABAJA INDEPENDIENTEMENTE DE LA APPLICACION
-
+function router(route,container){
     if(routes.has(route)){
-        container.innerHTML = routes.get(route)();
-    }else{
-        container.innerHTML = `<h2>404</h2>`;
+        container.replaceChildren(routes.get(route)());
+    }
+    else {
+        container.innerHTML = `<h2>404 - Página no encontrada</h2>`
     }
 }
-
-*/
