@@ -33,14 +33,14 @@ function renderContentForOne(titTablero){
   areaTablero.append(tablero);
 
   //llamamos a la función que genera el array
-  crearArray(6,juego1);
+  crearArray(6,juego1,tituloTablero1);
   
   return areaTablero;
 
 }
 
 //Función que genera el array SIN ASPECTO!
-function crearArray(tamano, juego1) {
+function crearArray(tamano, juego1,tituloTablero1) {
   const filas = tamano;
   const columnas = tamano;
 
@@ -72,13 +72,14 @@ function crearArray(tamano, juego1) {
 
 
   //al final llamamos a la funcion que le da aspecto
-  crearCeldasFlip(matriz, juego1,contador,numUno,numDos);
+  crearCeldasFlip(matriz, juego1,contador,numUno,numDos,tituloTablero1);
   
 }
 
 //Funcion que crea el array CON ASPECTO en el DOM
-function crearCeldasFlip(matriz,juego1,contador,numUno,numDos){
-  
+function crearCeldasFlip(matriz,juego1,contador,numUno,numDos,tituloPlayer){
+  setTurno(tituloPlayer);
+
   for (let i = 0; i < matriz.length; i++) {
     for (let j = 0; j < matriz[i].length; j++) {
 
@@ -120,11 +121,12 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos){
         mostrarCeldasUnaVez(flipContainer);
       },500)
       
+      
       //el evento que voltea + la logica del juego... INTENTAR EXTERNALIZAR LA LOGICA!
       flipContainer.addEventListener('click', function() {
         //si la tarjeta tiene "locked" pasamos de ella
         if (flipContainer.dataset.locked === "true") return;
-        //si no lo tiene le damos la vuelta a la tarjeta y sigue con la logica
+        //si no lo tiene le damos la vuelta a la tarjeta y sigue con la logica      
         flipContainer.classList.toggle('flipped');
         
         //Logica del juego hacia abajo
@@ -133,22 +135,24 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos){
           numUno=undefined;
           numDos=undefined;
 
-          console.log(`RESET-> Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}`);
+          console.log(`RESET-> Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
         };
 
         if(contador === 1){
           numUno = matriz[i][j];
-          console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}`);
+          console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
           
           contador++;
         }else if(contador === 2){
+          
           numDos = matriz[i][j];
-          console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}`);
+          console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
 
           contador++;
           if(numUno.textContent === numDos.textContent && numUno !== numDos){//nos aseguramos de que no se haga click 2 veces en la misma celda
             console.log('Acierto!');
             puntos++;
+            
             alert(
               `
               Bien Hecho! +1 punto!
@@ -168,6 +172,16 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos){
               numUno.classList.toggle('flipped');
               numDos.classList.toggle('flipped');
             },500)
+
+            //Una vez falla uno de los dos turnos, pasa al siguiente.
+            if(turno===1){
+              turno=2;
+            }else if(turno ===2){
+              turno=1;
+            }
+            setTimeout(()=>{
+              setTurno(tituloPlayer); 
+            },500)
             
           }
         }
@@ -184,6 +198,14 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos){
   
 }
 
+//funcion que comprueba el turno
+function setTurno(tituloPlayer){
+  if(turno===1){
+    tituloPlayer.innerHTML='Player 1';
+  }else if(turno ===2){
+    tituloPlayer.innerHTML='Player 2';
+  }
+}
 
 //Funcion que muestra las celdas una vez al principio del juego
 function mostrarCeldasUnaVez(flipContainer){
@@ -200,6 +222,12 @@ let contador=1;
 let numUno;
 let numDos;
 let puntos=0;
+
+let turno = 1;
+
+let numTres;
+let numCuatro;
+
 
 function logicaGame(){
   //Logica del juego hacia abajo
