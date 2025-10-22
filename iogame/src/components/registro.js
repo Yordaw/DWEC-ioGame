@@ -1,6 +1,7 @@
-export { renderLogin };
+export { renderRegistro};
 
-function renderLogin() {
+function renderRegistro() {
+
     const formulario = document.createElement('div');
     formulario.innerHTML = 
    `
@@ -9,7 +10,7 @@ function renderLogin() {
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title text-center">Iniciar Sesión</h2>
+                        <h2 class="card-title text-center">Registro Nuevo Usuario</h2>
                         <form>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
@@ -19,21 +20,21 @@ function renderLogin() {
                                 <label for="password" class="form-label">Contraseña</label>
                                 <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña">
                             </div>
-                            <button type="submit" class="btn btn-primary w-100" id="botonEnviarLogin">Entrar</button>
+                            <button type="submit" class="btn btn-primary w-100" id="botonEnviarRegistro">Registrarse</button>
                             <br>
                             <br>
-                            <a href="#registro" class="btn btn-warning btn-lg" data-link >Registrarse</a>
+                            <a href="#login" class="btn btn-danger btn-lg" data-link >Volver a Login</a>
                         </form>
                     </div>
                 </div>
-                <h2 class="card-title text-center" id="resultadoLogin"></h2>
+                <h2 class="card-title text-center" id="resultadoRegistro"></h2>
             </div>
         </div>
     </div>
     `;
-   
-    const mensajeLogin = formulario.querySelector('#resultadoLogin');
-    const botonEnviar = formulario.querySelector('#botonEnviarLogin');
+ 
+    const mensajeRegistro = formulario.querySelector('#resultadoRegistro');
+    const botonEnviar = formulario.querySelector('#botonEnviarRegistro');
     //La clave supabase
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNzbnJnYWpodW1udGNyYWZzY3RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MDkzMzksImV4cCI6MjA3NjE4NTMzOX0.2lA4EV1xtMtsAB1weI_DJZ6c2F5QaD-q30pmMn03Ldg';
     //El acces token
@@ -49,8 +50,8 @@ function renderLogin() {
             "password": password
         }
 
-        //Comunicacion con supabase para hacer login
-        let response = await fetch('https://csnrgajhumntcrafsctc.supabase.co/auth/v1/token?grant_type=password',{
+        //Comunicacion con supabase para registrar nuevos usuarios
+        let response = await fetch('https://csnrgajhumntcrafsctc.supabase.co/auth/v1/signup',{
             method: 'post',
             headers: {
                 "apiKey": SUPABASE_KEY,
@@ -65,21 +66,27 @@ function renderLogin() {
         
         //Si se ha registrado correctamente lo mostramos en un mensaje y a los 2seg nos lleva a hacer login
         if(response.status===200){
-            window.location.hash = '#game';
-            access_token=data.access_token;
-            localStorage.setItem('access_token',access_token);
-        }else{//Si hay un error al registrarse lo mostramos y a los 2seg hace reload
-            mensajeLogin.innerHTML = `
-            Error al iniciar sesión.
-            Intentelo de nuevo...
+            
+            mensajeRegistro.innerHTML = `
+            Usuario registrado con exito.
+            No olvides verificar tu correo!
             `;
             
             setTimeout(() => {
-                mensajeLogin.innerHTML = '';
+                window.location.hash = '#login';
+            },2000);
+
+        }else{//Si hay un error al registrarse lo mostramos y a los 2seg hace reload
+            mensajeRegistro.innerHTML = 'Error al registrar el usuario';
+
+            setTimeout(() => {
+                window.location.reload();
             },2000);
             
         }
+
     });
     return formulario;
+    
 }
 

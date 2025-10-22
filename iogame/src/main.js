@@ -13,8 +13,8 @@ import { renderFooter } from "./components/footer";
    const mainDiv = document.querySelector('#main');
    const headerDiv = document.querySelector('#header');
    const footerDiv = document.querySelector('#footer');
-
-   headerDiv.innerHTML = renderHeader();
+   
+   headerDiv.replaceChildren(renderHeader());
    footerDiv.innerHTML = renderFooter();
   
    router(window.location.hash, mainDiv);

@@ -130,7 +130,7 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos,tituloPlayer){
         flipContainer.classList.toggle('flipped');
         
         //Logica del juego hacia abajo
-        if(contador>2){//si el contador pasa de 2, hacemos "Reset" de todo
+        if(contador>2){//si el contador pasa de 2, hacemos "Reset" de algunas variables
           contador=1;
           numUno=undefined;
           numDos=undefined;
@@ -139,26 +139,38 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos,tituloPlayer){
         };
 
         if(contador === 1){
-          numUno = matriz[i][j];
+          numUno = matriz[i][j];        
           console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
           
           contador++;
         }else if(contador === 2){
-          
           numDos = matriz[i][j];
           console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
 
           contador++;
           if(numUno.textContent === numDos.textContent && numUno !== numDos){//nos aseguramos de que no se haga click 2 veces en la misma celda
             console.log('Acierto!');
-            puntos++;
             
-            alert(
+            if(turno===1){ //POR DONDE IBAMOS? HAY QUE HACER QUE EN EL ARRAY(SIN FRONTEND) SE MARQUE UNA "X o O" EN LAS ACERTADAS SEGUN EL PLAYER
+              matriz[i][j]='X';console.table(matriz); //para verlo en console
+              puntosPlayer1++;
+              
+              alert(
               `
               Bien Hecho! +1 punto!
-              Puntos Totales: ${puntos}
+              Puntos Totales: ${puntosPlayer1}
               `);
-
+            }else if(turno ===2){
+              matriz[i][j]='O';console.table(matriz); //para verlo en console
+              puntosPlayer2++;
+              
+              alert(
+              `
+              Bien Hecho! +1 punto!
+              Puntos Totales: ${puntosPlayer2}
+              `);
+            }
+            checkPuntos(puntosPlayer1,puntosPlayer2);
 
             //Los que ya han sido acertados, los bloqueo
             numUno.dataset.locked = 'true';
@@ -218,16 +230,44 @@ function mostrarCeldasUnaVez(flipContainer){
 }
 
 //variables globales TEMPORALES
+let turno = 1;
 let contador=1;
 let numUno;
 let numDos;
-let puntos=0;
+let puntosPlayer1=0;
+let puntosPlayer2=0;
 
-let turno = 1;
 
-let numTres;
-let numCuatro;
+function checkPuntos(puntosPlayer1,puntosPlayer2){
+  const maxPuntos = 3;
 
+  if(puntosPlayer1+puntosPlayer2 >= maxPuntos){
+    console.log('Fin del Juego');
+    alert('El juego ha acabado!!');
+    if(confirm('Quieres jugar de nuevo?')){
+      resetTodo();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }else{
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+
+    }
+    
+  }
+
+}
+
+function resetTodo(){
+   turno = 1;
+   contador=1;
+   numUno;
+   numDos;
+   puntosPlayer1=0;
+   puntosPlayer2=0;
+}
 
 function logicaGame(){
   //Logica del juego hacia abajo
