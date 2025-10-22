@@ -37,8 +37,7 @@ function renderRegistro() {
     const botonEnviar = formulario.querySelector('#botonEnviarRegistro');
     //La clave supabase
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNzbnJnYWpodW1udGNyYWZzY3RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MDkzMzksImV4cCI6MjA3NjE4NTMzOX0.2lA4EV1xtMtsAB1weI_DJZ6c2F5QaD-q30pmMn03Ldg';
-    //El acces token
-    let access_token = '';
+    
     botonEnviar.addEventListener('click',async()=>{
         //Datos necesarios para crear el objeto
         const email = formulario.querySelector('#email').value;

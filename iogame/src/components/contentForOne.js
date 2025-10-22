@@ -2,9 +2,32 @@ export {renderContentForOne}
 
 //Funcion Principal 
 function renderContentForOne(titTablero){
+  
   //se crea otro div dentro del padre
   const areaTablero = document.createElement("div");
   areaTablero.setAttribute('id','areaTablero');
+
+  //se crea el area que muestra los puntos
+  const areaPuntos = document.createElement('div');
+  areaPuntos.setAttribute('id','areaPuntos');
+  //se crea el titulo de ese area
+  const tituloPuntos = document.createElement('h2');
+  tituloPuntos.setAttribute('id','tituloPuntos');
+  tituloPuntos.innerHTML=' Puntos ';
+  //se crean los titulos de los puntos de cada jugador
+  const puntos1 = document.createElement("h2");
+  puntos1.setAttribute('class','puntos');
+  puntos1.setAttribute('id','puntos1');
+  puntos1.innerHTML=`Player 1: 0`;
+  const puntos2 = document.createElement("h2");
+  puntos2.setAttribute('class','puntos');
+  puntos2.setAttribute('id','puntos2');
+  puntos2.innerHTML=`Player 2: 0`;
+  //los insertamos todos en areaPuntos
+  areaPuntos.append(tituloPuntos);
+  areaPuntos.append(puntos1);
+  areaPuntos.append(puntos2);
+
   //se crea otro div para el tablero del jugador
   const tablero = document.createElement("div");
   
@@ -29,6 +52,7 @@ function renderContentForOne(titTablero){
   //metemos los divs de los juegos dentro de su tablero
   tablero.append(juego1);
 
+  areaTablero.append(areaPuntos);
   //metemos los tableros dentro del area de tableros
   areaTablero.append(tablero);
 
@@ -71,6 +95,8 @@ function crearArray(tamano, juego1,tituloTablero1) {
   console.table(matriz); //para verlo en console
 
 
+  
+  comenzarJuego();//Si respondemos que SI comienza el juego, sino, vuelve a HOME
   //al final llamamos a la funcion que le da aspecto
   crearCeldasFlip(matriz, juego1,contador,numUno,numDos,tituloTablero1);
   
@@ -115,21 +141,20 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos,tituloPlayer){
       
       //metemos la carta en su contenedor flip
       flipContainer.appendChild(flipCard);
-      
-      
+           
       setTimeout(()=>{
         mostrarCeldasUnaVez(flipContainer);
       },500)
-      
+    
       
       //el evento que voltea + la logica del juego... INTENTAR EXTERNALIZAR LA LOGICA!
       flipContainer.addEventListener('click', function() {
         //si la tarjeta tiene "locked" pasamos de ella
         if (flipContainer.dataset.locked === "true") return;
-        //si no lo tiene le damos la vuelta a la tarjeta y sigue con la logica      
+        //si la tarjeta no tiene el "locked" le damos la vuelta a la tarjeta y sigue con la logica      
         flipContainer.classList.toggle('flipped');
         
-        //Logica del juego hacia abajo
+        //Logica del juego empieza hacia abajo!
         if(contador>2){//si el contador pasa de 2, hacemos "Reset" de algunas variables
           contador=1;
           numUno=undefined;
@@ -152,18 +177,24 @@ function crearCeldasFlip(matriz,juego1,contador,numUno,numDos,tituloPlayer){
             console.log('Acierto!');
             
             if(turno===1){ //POR DONDE IBAMOS? HAY QUE HACER QUE EN EL ARRAY(SIN FRONTEND) SE MARQUE UNA "X o O" EN LAS ACERTADAS SEGUN EL PLAYER
+              let puntos1 = document.querySelector('#puntos1');
+              let puntos2 = document.querySelector('#puntos2');
               matriz[i][j]='X';console.table(matriz); //para verlo en console
               puntosPlayer1++;
-              
+              puntos1.innerHTML=`Player 1: ${puntosPlayer1}`;
+              puntos2.innerHTML=`Player 2: ${puntosPlayer2}`;
               alert(
               `
               Bien Hecho! +1 punto!
               Puntos Totales: ${puntosPlayer1}
               `);
             }else if(turno ===2){
+              let puntos1 = document.querySelector('#puntos1');
+              let puntos2 = document.querySelector('#puntos2');
               matriz[i][j]='O';console.table(matriz); //para verlo en console
               puntosPlayer2++;
-              
+              puntos1.innerHTML=`Player 1: ${puntosPlayer1}`;
+              puntos2.innerHTML=`Player 2: ${puntosPlayer2}`;
               alert(
               `
               Bien Hecho! +1 punto!
@@ -219,9 +250,17 @@ function setTurno(tituloPlayer){
   }
 }
 
-//Funcion que muestra las celdas una vez al principio del juego
+function comenzarJuego(){
+  let respuesta = confirm('Comenzar el juego?');
+  
+  if(respuesta!==true){
+    window.location.hash = '#';
+  }
+}
+
+//Funcion que muestra las celdas una vez al principio del juego para poder verlas antes de empezar
 function mostrarCeldasUnaVez(flipContainer){
- 
+  
   flipContainer.classList.toggle('flipped');
   setTimeout(() => {
     flipContainer.classList.toggle('flipped');
