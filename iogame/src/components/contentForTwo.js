@@ -48,7 +48,7 @@ function renderContentForTwo(cantCuadricula){
       juego2.append(celda2);
 
    }
-
+   
 
    //metemos los divs de los juegos dentro de su tablero
    tablero.append(juego1);

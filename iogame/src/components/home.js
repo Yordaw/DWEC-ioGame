@@ -11,7 +11,7 @@ function renderHome() {
             <p>Elige tu modo de juego:</p>
 
             <button class="btn btn-primary btn-lg ms-2" id="botonUnJugador">Un Jugador</button>
-            <button class="btn btn-secondary btn-lg ms-2" disabled>Dos Jugadores (Próximamente)</button>
+            <button class="btn btn-secondary btn-lg ms-2" disabled>Dos Jugadores (Próximamente...o nunca)</button>
             <a href="#login" class="btn btn-primary btn-lg" data-link>Iniciar Sersión</a>
         </div>
     </div>
