@@ -113,73 +113,12 @@ CasiNegro #060A0D -> Fondo tablero
     display: grid;            
     width: 500px;
     height: 500px;
-    border-radius: 10px;
-}
 
-// Grid específico para cada tamaño de tablero
-.juego.grid-4 {
-    grid-template-columns: repeat(4, 1fr); 
-    grid-template-rows: repeat(4, 1fr);
-}
-
-.juego.grid-6 {
     grid-template-columns: repeat(6, 1fr); 
     grid-template-rows: repeat(6, 1fr);
+    //border: 5px solid #C5630C;
+    border-radius: 10px;
 }
-
-.juego.grid-8 {
-    grid-template-columns: repeat(8, 1fr); 
-    grid-template-rows: repeat(8, 1fr);
-}
-
-// ==========================================
-// ESTILOS PARA SELECCIÓN DE DIFICULTAD
-// ==========================================
-
-.contenedor-dificultad {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 40px;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.boton-dificultad {
-  padding: 20px 40px;
-  font-weight: bold;
-  //background: linear-gradient(135deg, #ff0037 0%, #ff7700 100%);
-  background-color: #F0EDE5; 
-  color: #ff7700;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 300px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-
-  &:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 0px 25px 10px #ff0037; 
-  }
-
-  &:active {
-    transform: translateY(-2px) scale(1.02);
-  }
-}
-
-.nombre-dificultad {
-  font-size: 1.8rem;
-  margin-bottom: 5px;
-}
-
-.descripcion-dificultad {
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-// FIN ESTILOS PARA SELECCIÓN DE DIFICULTAD
 
 //Estilos para el flip
 .flip-container {

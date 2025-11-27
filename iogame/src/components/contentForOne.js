@@ -1,98 +1,284 @@
-export {renderContentForOne}
+export { renderContentForOne };
 
-//variables globales TEMPORALES hacer objeto PARTIDA!
-let turno = 1;
-let contador=1;
-let numUno;
-let numDos;
-let tempI;
-let tempJ;
-let puntosPlayer1=0;
-let puntosPlayer2=0;
+// ==========================================
+// OBJETO PARTIDA - Centraliza el estado del juego
+// ==========================================
+const PARTIDA = {
+  turno: 1,
+  contador: 1,
+  numUno: null,
+  numDos: null,
+  tempI: null,
+  tempJ: null,
+  puntosPlayer1: 0,
+  puntosPlayer2: 0,
+  matriz: [],
+  tamanoSeleccionado: null // Nuevo: guarda el tamaño elegido
+};
 
-//Funcion Principal 
-function renderContentForOne(titTablero){
-  
-  //se crea otro div dentro del padre
+// ==========================================
+// CONSTANTES DEL JUEGO
+// ==========================================
+const CONFIG = {
+  TIEMPO_MOSTRAR_CELDAS: 2500,
+  TIEMPO_VOLTEAR_FALLO: 500
+};
+
+// Tamaños disponibles del tablero
+const TAMAÑOS = {
+  FACIL: { 
+    valor: 4, 
+    nombre: 'Fácil', 
+    descripcion: '4x4 (8 pares)' 
+  },
+  MEDIO: { 
+    valor: 6, 
+    nombre: 'Medio', 
+    descripcion: '6x6 (18 pares)' 
+  },
+  DIFICIL: { 
+    valor: 8, 
+    nombre: 'Difícil', 
+    descripcion: '8x8 (32 pares)' 
+  }
+};
+
+// ==========================================
+// FUNCIÓN PRINCIPAL - Punto de entrada
+// ==========================================
+function renderContentForOne(titTablero) {
+  // Crear el área principal del tablero
   const areaTablero = document.createElement("div");
-  areaTablero.setAttribute('id','areaTablero');
+  areaTablero.setAttribute('id', 'areaTablero');
 
-  //se crea el area que muestra los puntos
-  const areaPuntos = document.createElement('div');
-  areaPuntos.setAttribute('id','areaPuntos');
-  //se crea el titulo de ese area
-  const tituloPuntos = document.createElement('h2');
-  tituloPuntos.setAttribute('id','tituloPuntos');
-  tituloPuntos.innerHTML=' Puntos ';
-  //se crean los titulos de los puntos de cada jugador
-  const puntos1 = document.createElement("h2");
-  puntos1.setAttribute('class','puntos');
-  puntos1.setAttribute('id','puntos1');
-  puntos1.innerHTML=`Player 1: 0`;
-  const puntos2 = document.createElement("h2");
-  puntos2.setAttribute('class','puntos');
-  puntos2.setAttribute('id','puntos2');
-  puntos2.innerHTML=`Player 2: 0`;
-  //los insertamos todos en areaPuntos
-  areaPuntos.append(tituloPuntos);
-  areaPuntos.append(puntos1);
-  areaPuntos.append(puntos2);
-
-  //se crea otro div para el tablero del jugador
-  const tablero = document.createElement("div");
+  // Crear y añadir el área de puntos
+  const areaPuntos = crearAreaPuntos();
   
-  //añado atributos a esos tableros
-  tablero.setAttribute('class','tablero');
-  tablero.setAttribute('id','tablUno');
-  
-  //Se crean los titulos de todo y se le da contenido
-  const tituloTablero1 = document.createElement("h2");
-  tituloTablero1.setAttribute('id','tituloTablero1');
-  tituloTablero1.innerHTML= `Player 1`;
+  // Crear y añadir el tablero del jugador
+  const tablero = crearTableroJugador();
 
-  //metemos los titulos de los tableros dentro del tablero que le toca
-  tablero.append(tituloTablero1);
-
-  //creamos otros div que será el juego1 y juego2
-  const juego1 = document.createElement("div");
-
-  //damos atributos
-  juego1.setAttribute('class','juego');
-
-  //metemos los divs de los juegos dentro de su tablero
-  tablero.append(juego1);
-
+  // Ensamblar el área del tablero
   areaTablero.append(areaPuntos);
-  //metemos los tableros dentro del area de tableros
   areaTablero.append(tablero);
 
-  //llamamos a la función que genera el array
-  crearArray(6,juego1,tituloTablero1);
+  // Mostrar pantalla de selección de dificultad
+  const juego1 = tablero.querySelector('.juego');
+  const tituloTablero1 = tablero.querySelector('#tituloTablero1');
   
-  return areaTablero;
+  mostrarSeleccionDificultad(juego1, tituloTablero1);
 
+  return areaTablero;
 }
 
-//Función que genera el array SIN ASPECTO!
-function crearArray(tamano, juego1,tituloTablero1) {
-  const filas = tamano;
-  const columnas = tamano;
+// ==========================================
+// FUNCIONES DE SELECCIÓN DE DIFICULTAD
+// ==========================================
 
-  //array con cada numero 2 veces
+/**
+ * Muestra la pantalla de selección de dificultad
+ * @param {HTMLElement} contenedor - Contenedor donde mostrar los botones
+ * @param {HTMLElement} tituloTablero - Elemento del título del tablero
+ */
+function mostrarSeleccionDificultad(contenedor, tituloTablero) {
+  // Actualizar título
+  tituloTablero.innerHTML = 'Selecciona Dificultad';
+  
+  // Crear contenedor de botones con clase CSS
+  const contenedorBotones = document.createElement('div');
+  contenedorBotones.setAttribute('class', 'contenedor-dificultad');
+
+  // Crear botones para cada dificultad
+  Object.entries(TAMAÑOS).forEach(([clave, config]) => {
+    const boton = crearBotonDificultad(config, contenedor, tituloTablero);
+    contenedorBotones.appendChild(boton);
+  });
+
+  // Limpiar contenedor y añadir botones
+  contenedor.innerHTML = '';
+  contenedor.appendChild(contenedorBotones);
+}
+
+/**
+ * Crea un botón de selección de dificultad
+ * @param {Object} config - Configuración del tamaño (valor, nombre, descripción)
+ * @param {HTMLElement} contenedor - Contenedor del juego
+ * @param {HTMLElement} tituloTablero - Elemento del título
+ * @returns {HTMLElement} - Botón de dificultad
+ */
+function crearBotonDificultad(config, contenedor, tituloTablero) {
+  const boton = document.createElement('button');
+  boton.setAttribute('class', 'boton-dificultad');
+  
+  // Crear estructura interna del botón
+  const nombreDificultad = document.createElement('div');
+  nombreDificultad.setAttribute('class', 'nombre-dificultad');
+  nombreDificultad.innerHTML = config.nombre;
+  
+  const descripcionDificultad = document.createElement('div');
+  descripcionDificultad.setAttribute('class', 'descripcion-dificultad');
+  descripcionDificultad.innerHTML = config.descripcion;
+  
+  boton.append(nombreDificultad, descripcionDificultad);
+
+  // Evento click: iniciar juego con el tamaño seleccionado
+  boton.addEventListener('click', () => {
+    if (comenzarJuego()) {
+      PARTIDA.tamanoSeleccionado = config.valor;
+      iniciarJuego(contenedor, tituloTablero);
+    }
+  });
+
+  return boton;
+}
+
+/**
+ * Inicia el juego con el tamaño seleccionado
+ * @param {HTMLElement} contenedor - Contenedor del juego
+ * @param {HTMLElement} tituloTablero - Elemento del título
+ */
+function iniciarJuego(contenedor, tituloTablero) {
+  // Limpiar el contenedor
+  contenedor.innerHTML = '';
+
+  // Generar la matriz con el tamaño seleccionado
+  PARTIDA.matriz = generarMatrizJuego(PARTIDA.tamanoSeleccionado);
+  console.table(PARTIDA.matriz); // Para debug en consola
+  
+  // Actualizar el grid del contenedor según el tamaño
+  actualizarGridJuego(contenedor, PARTIDA.tamanoSeleccionado);
+  
+  // Renderizar las celdas en el DOM
+  renderizarCeldas(PARTIDA.matriz, contenedor, tituloTablero);
+}
+
+/**
+ * Actualiza el grid CSS del contenedor según el tamaño del tablero
+ * @param {HTMLElement} contenedor - Contenedor del juego
+ * @param {number} tamano - Tamaño del tablero
+ */
+function actualizarGridJuego(contenedor, tamano) {
+  // Añadir clase específica según el tamaño
+  contenedor.classList.remove('grid-4', 'grid-6', 'grid-8');
+  contenedor.classList.add(`grid-${tamano}`);
+}
+
+// ==========================================
+// FUNCIONES PURAS DE CREACIÓN DE ELEMENTOS DOM
+// ==========================================
+
+/**
+ * Crea el área de puntos con sus elementos hijos
+ * @returns {HTMLElement} - Elemento DOM del área de puntos
+ */
+function crearAreaPuntos() {
+  const areaPuntos = document.createElement('div');
+  areaPuntos.setAttribute('id', 'areaPuntos');
+
+  // Crear título del área de puntos
+  const tituloPuntos = document.createElement('h2');
+  tituloPuntos.setAttribute('id', 'tituloPuntos');
+  tituloPuntos.innerHTML = ' Puntos ';
+
+  // Crear elementos de puntos para cada jugador
+  const puntos1 = crearElementoPuntos('puntos1', 'Player 1', 0);
+  const puntos2 = crearElementoPuntos('puntos2', 'Player 2', 0);
+
+  // Ensamblar el área de puntos
+  areaPuntos.append(tituloPuntos, puntos1, puntos2);
+  
+  return areaPuntos;
+}
+
+/**
+ * Crea un elemento de puntos para un jugador
+ * @param {string} id - ID del elemento
+ * @param {string} nombreJugador - Nombre del jugador
+ * @param {number} puntos - Puntos iniciales
+ * @returns {HTMLElement} - Elemento DOM de puntos
+ */
+function crearElementoPuntos(id, nombreJugador, puntos) {
+  const elementoPuntos = document.createElement("h2");
+  elementoPuntos.setAttribute('class', 'puntos');
+  elementoPuntos.setAttribute('id', id);
+  elementoPuntos.innerHTML = `${nombreJugador}: ${puntos}`;
+  
+  return elementoPuntos;
+}
+
+/**
+ * Crea el tablero del jugador con su estructura
+ * @returns {HTMLElement} - Elemento DOM del tablero
+ */
+function crearTableroJugador() {
+  const tablero = document.createElement("div");
+  tablero.setAttribute('class', 'tablero');
+  tablero.setAttribute('id', 'tablUno');
+
+  // Crear título del tablero
+  const tituloTablero1 = document.createElement("h2");
+  tituloTablero1.setAttribute('id', 'tituloTablero1');
+  tituloTablero1.innerHTML = `Player 1`;
+
+  // Crear área del juego
+  const juego1 = document.createElement("div");
+  juego1.setAttribute('class', 'juego');
+
+  // Ensamblar el tablero
+  tablero.append(tituloTablero1, juego1);
+  
+  return tablero;
+}
+
+// ==========================================
+// FUNCIONES PURAS DE GENERACIÓN DE DATOS
+// ==========================================
+
+/**
+ * Genera un array de números barajados para el juego
+ * @param {number} tamano - Tamaño del tablero (filas y columnas)
+ * @returns {number[]} - Array de números barajados (copia)
+ */
+function generarArrayNumeros(tamano) {
+  const totalCeldas = tamano * tamano;
+  const cantidadPares = totalCeldas / 2;
+  
+  // Crear array con cada número duplicado
   const arrayNumeros = [];
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < cantidadPares; i++) {
     arrayNumeros.push(i, i);
   }
 
-  //barajamos los numeros
-  for (let i = arrayNumeros.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arrayNumeros[i], arrayNumeros[j]] = [arrayNumeros[j], arrayNumeros[i]];
-  }
+  // Barajar los números usando algoritmo Fisher-Yates
+  return barajarArray(arrayNumeros);
+}
 
-  //hacer el array de 6x6
+/**
+ * Baraja un array usando el algoritmo Fisher-Yates
+ * @param {Array} array - Array a barajar
+ * @returns {Array} - Copia del array barajado
+ */
+function barajarArray(array) {
+  const arrayBarajado = [...array]; // Crear copia para no mutar el original
+  
+  for (let i = arrayBarajado.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arrayBarajado[i], arrayBarajado[j]] = [arrayBarajado[j], arrayBarajado[i]];
+  }
+  
+  return arrayBarajado;
+}
+
+/**
+ * Convierte un array lineal en una matriz bidimensional
+ * @param {number[]} arrayNumeros - Array de números
+ * @param {number} filas - Número de filas
+ * @param {number} columnas - Número de columnas
+ * @returns {number[][]} - Matriz bidimensional (copia)
+ */
+function convertirAMatriz(arrayNumeros, filas, columnas) {
   const matriz = [];
   let indice = 0;
+  
   for (let i = 0; i < filas; i++) {
     const fila = [];
     for (let j = 0; j < columnas; j++) {
@@ -101,283 +287,357 @@ function crearArray(tamano, juego1,tituloTablero1) {
     }
     matriz.push(fila);
   }
-
-  console.table(matriz); //para verlo en console
-
-
   
-  comenzarJuego();//Si respondemos que SI comienza el juego, sino, vuelve a HOME
-  //al final llamamos a la funcion que le da aspecto
-  crearCeldasFlip(matriz, juego1,contador,numUno,numDos,tituloTablero1);
-  
+  return matriz;
 }
 
-//Funcion que crea el array CON ASPECTO en el DOM
-function crearCeldasFlip(matriz,juego1,contadorClick,numUno,numDos,tituloPlayer){
-  setTurno(tituloPlayer);
+/**
+ * Genera la matriz completa del juego
+ * @param {number} tamano - Tamaño del tablero
+ * @returns {number[][]} - Matriz del juego
+ */
+function generarMatrizJuego(tamano) {
+  const arrayNumeros = generarArrayNumeros(tamano);
+  return convertirAMatriz(arrayNumeros, tamano, tamano);
+}
 
-  for (let i = 0; i < matriz.length; i++) {
-    for (let j = 0; j < matriz[i].length; j++) {
+// ==========================================
+// FUNCIONES DE CREACIÓN DE CELDAS
+// ==========================================
 
-      //Crear el contenedor del flip
-      let flipContainer = document.createElement("div");
-      flipContainer.setAttribute('class', 'flip-container');
-    
-      //Crear la carta flip
-      let flipCard = document.createElement("div");
-      flipCard.setAttribute('class', 'flip-card');
+/**
+ * Crea una celda flip con su estructura HTML
+ * @param {number} valor - Valor numérico de la celda
+ * @returns {HTMLElement} - Elemento DOM de la celda flip
+ */
+function crearCeldaFlip(valor) {
+  // Crear el contenedor del flip
+  const flipContainer = document.createElement("div");
+  flipContainer.setAttribute('class', 'flip-container');
+
+  // Crear la carta flip
+  const flipCard = document.createElement("div");
+  flipCard.setAttribute('class', 'flip-card');
+
+  // Crear cara delantera
+  const flipFront = crearCaraFlip('flip-front', '?');
+  
+  // Crear cara trasera
+  const flipBack = crearCaraFlip('flip-back', valor);
+
+  // Ensamblar la carta
+  flipCard.append(flipFront, flipBack);
+  flipContainer.appendChild(flipCard);
+
+  return flipContainer;
+}
+
+/**
+ * Crea una cara de la carta flip
+ * @param {string} clase - Clase CSS de la cara
+ * @param {string|number} contenido - Contenido a mostrar
+ * @returns {HTMLElement} - Elemento DOM de la cara
+ */
+function crearCaraFlip(clase, contenido) {
+  const cara = document.createElement("div");
+  cara.setAttribute('class', clase);
+  
+  const texto = document.createElement("h2");
+  texto.setAttribute('class', 'textoCeldas');
+  texto.innerHTML = contenido;
+  
+  cara.appendChild(texto);
+  
+  return cara;
+}
+
+// ==========================================
+// FUNCIONES DE RENDERIZADO
+// ==========================================
+
+/**
+ * Renderiza todas las celdas del juego en el DOM
+ * @param {number[][]} matriz - Matriz con los valores
+ * @param {HTMLElement} contenedor - Contenedor donde se añadirán las celdas
+ * @param {HTMLElement} tituloPlayer - Elemento del título del jugador actual
+ */
+function renderizarCeldas(matriz, contenedor, tituloPlayer) {
+  actualizarTituloTurno(tituloPlayer);
+
+  // Recorrer la matriz y crear las celdas
+  matriz.forEach((fila, i) => {
+    fila.forEach((valor, j) => {
+      const flipContainer = crearCeldaFlip(valor);
       
-      //Cara delantera
-      let flipFront = document.createElement("div");
-      flipFront.setAttribute('class', 'flip-front');
-      let textoFront = document.createElement("h2");
-      textoFront.setAttribute('class', 'textoCeldas');
-      textoFront.innerHTML = '?';
-      flipFront.appendChild(textoFront);
-      
-      //Cara trasera
-      let flipBack = document.createElement("div");
-      flipBack.setAttribute('class', 'flip-back');
-      let textoBack = document.createElement("h2");
-      textoBack.setAttribute('class', 'textoCeldas');
-      
-      //Contenido de la celda de la matriz la añadimos a la vista
-      textoBack.innerHTML = matriz[i][j];
-      flipBack.appendChild(textoBack);
-      
-      //poner las caras a la carta
-      flipCard.appendChild(flipFront);
-      flipCard.appendChild(flipBack);
-      
-      //metemos la carta en su contenedor flip
-      flipContainer.appendChild(flipCard);
-           
-      setTimeout(()=>{
-        mostrarCeldasUnaVez(flipContainer);
-      },500)
-    
-      
-      //el evento que voltea + la logica del juego... INTENTAR EXTERNALIZAR LA LOGICA!
-      flipContainer.addEventListener('click', function() {
-        //si la tarjeta tiene "locked" pasamos de ella
-        if (flipContainer.dataset.locked === "true") return;
-        //si la tarjeta no tiene el "locked" le damos la vuelta a la tarjeta y sigue con la logica      
-        flipContainer.classList.toggle('flipped');
-        
-        //Logica del juego empieza hacia abajo!
-        if(contadorClick>2){//si el contador pasa de 2, hacemos "Reset" de algunas variables
-          contadorClick=1;
-          numUno=undefined;
-          numDos=undefined;
+      // Mostrar la celda brevemente al inicio
+      setTimeout(() => {
+        mostrarCeldaTemporalmente(flipContainer);
+      }, 500);
 
-          //console.log(`RESET-> Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
-        };
+      // Añadir el evento de click con la lógica del juego
+      agregarEventoClick(flipContainer, i, j, tituloPlayer);
 
-        if(contadorClick === 1){
-          numUno = matriz[i][j];        
-          //console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
-          //Nos guardamos las posiciones de la matriz en las que se ha clickado la primera vez porque lo necesitamos más abajo
-          tempI=i;
-          tempJ=j;
-
-          contadorClick++;
-        }else if(contadorClick === 2){
-          numDos = matriz[i][j];
-          //console.log(`Contador: ${contador}, NumUno: ${numUno}, NumDos: ${numDos}, Turno: ${turno}`);
-          
-          contadorClick++;
-          if(numUno.textContent === numDos.textContent && numUno !== numDos){//nos aseguramos de que no se haga click 2 veces en la misma celda
-            //console.log('Acierto!');
-            
-            if(turno===1){
-              let puntos1 = document.querySelector('#puntos1');
-              let puntos2 = document.querySelector('#puntos2');
-
-              matriz[i][j]='X';
-              matriz[tempI][tempJ]='X';console.table(matriz); //para verlo en console
-              
-              puntosPlayer1++;
-              puntos1.innerHTML=`Player 1: ${puntosPlayer1}`;
-              puntos2.innerHTML=`Player 2: ${puntosPlayer2}`;
-              alert('Bien Hecho! +1 punto!');
-            }else if(turno ===2){
-              let puntos1 = document.querySelector('#puntos1');
-              let puntos2 = document.querySelector('#puntos2');
-
-              matriz[i][j]='O';
-              matriz[tempI][tempJ]='O';console.table(matriz); //para verlo en console
-
-              puntosPlayer2++;
-              puntos1.innerHTML=`Player 1: ${puntosPlayer1}`;
-              puntos2.innerHTML=`Player 2: ${puntosPlayer2}`;
-              alert('Bien Hecho! +1 punto!');
-            }
-
-            checkPuntos(puntosPlayer1,puntosPlayer2);
-
-            //Los que ya han sido acertados, los bloqueo  textoBack.innerHTML = matriz[i][j];
-            numUno.dataset.locked = 'true';
-            numUno.classList.add('locked');
-            
-            numDos.dataset.locked = 'true';
-            numDos.classList.add('locked');
-          }else{
-            console.log('Casi!');
-            setTimeout(()=>{
-              numUno.classList.toggle('flipped');
-              numDos.classList.toggle('flipped');
-            },500)
-
-            //Una vez falla uno de los dos turnos, pasa al siguiente.
-            if(turno===1){
-              turno=2;
-            }else if(turno ===2){
-              turno=1;
-            }
-            setTimeout(()=>{
-              setTurno(tituloPlayer); 
-            },500)
-            
-          }
-        }
-            
-
-      });
-      
-      //Asignar el contenedor a la matriz
+      // Guardar referencia del elemento en la matriz
       matriz[i][j] = flipContainer;
-      juego1.appendChild(flipContainer);
-      
-    }
-  }
-  
+      contenedor.appendChild(flipContainer);
+    });
+  });
 }
 
-//funcion que comprueba el turno
-function setTurno(tituloPlayer){
-  if(turno===1){
-    tituloPlayer.innerHTML='Player 1';
-  }else if(turno ===2){
-    tituloPlayer.innerHTML='Player 2';
+/**
+ * Añade el evento click a una celda con toda la lógica del juego
+ * @param {HTMLElement} flipContainer - Contenedor de la celda
+ * @param {number} i - Índice de fila
+ * @param {number} j - Índice de columna
+ * @param {HTMLElement} tituloPlayer - Elemento del título del jugador
+ */
+function agregarEventoClick(flipContainer, i, j, tituloPlayer) {
+  flipContainer.addEventListener('click', function() {
+    // Si la tarjeta está bloqueada, no hacer nada
+    if (flipContainer.dataset.locked === "true") return;
+
+    // Voltear la tarjeta
+    flipContainer.classList.toggle('flipped');
+
+    // Procesar el click según la lógica del juego
+    procesarClick(flipContainer, i, j, tituloPlayer);
+  });
+}
+
+// ==========================================
+// LÓGICA DEL JUEGO
+// ==========================================
+
+/**
+ * Procesa el click en una celda según el estado del contador
+ * @param {HTMLElement} flipContainer - Contenedor de la celda clickeada
+ * @param {number} i - Índice de fila
+ * @param {number} j - Índice de columna
+ * @param {HTMLElement} tituloPlayer - Elemento del título del jugador
+ */
+function procesarClick(flipContainer, i, j, tituloPlayer) {
+  // Si el contador supera 2, reiniciar variables
+  if (PARTIDA.contador > 2) {
+    resetearTurno();
+  }
+
+  if (PARTIDA.contador === 1) {
+    procesarPrimerClick(flipContainer, i, j);
+  } else if (PARTIDA.contador === 2) {
+    procesarSegundoClick(flipContainer, i, j, tituloPlayer);
   }
 }
 
-function comenzarJuego(){
-  let respuesta = confirm('Comenzar el juego?');
-  
-  if(respuesta!==true){
-    window.location.hash = '#';
+/**
+ * Procesa el primer click del turno
+ * @param {HTMLElement} flipContainer - Contenedor de la celda
+ * @param {number} i - Índice de fila
+ * @param {number} j - Índice de columna
+ */
+function procesarPrimerClick(flipContainer, i, j) {
+  PARTIDA.numUno = flipContainer;
+  PARTIDA.tempI = i;
+  PARTIDA.tempJ = j;
+  PARTIDA.contador++;
+}
+
+/**
+ * Procesa el segundo click del turno y verifica si hay pareja
+ * @param {HTMLElement} flipContainer - Contenedor de la celda
+ * @param {number} i - Índice de fila
+ * @param {number} j - Índice de columna
+ * @param {HTMLElement} tituloPlayer - Elemento del título del jugador
+ */
+function procesarSegundoClick(flipContainer, i, j, tituloPlayer) {
+  PARTIDA.numDos = flipContainer;
+  PARTIDA.contador++;
+
+  const valorUno = PARTIDA.numUno.querySelector('.flip-back .textoCeldas').textContent;
+  const valorDos = PARTIDA.numDos.querySelector('.flip-back .textoCeldas').textContent;
+
+  // Verificar si es el mismo elemento (evitar click doble)
+  if (PARTIDA.numUno === PARTIDA.numDos) {
+    return;
+  }
+
+  // Verificar si los valores coinciden
+  if (valorUno === valorDos) {
+    manejarAcierto(i, j);
+  } else {
+    manejarFallo(tituloPlayer);
   }
 }
 
-//Funcion que muestra las celdas una vez al principio del juego para poder verlas antes de empezar
-function mostrarCeldasUnaVez(flipContainer){
+/**
+ * Maneja el caso cuando el jugador acierta una pareja
+ * @param {number} i - Índice de fila de la segunda celda
+ * @param {number} j - Índice de columna de la segunda celda
+ */
+function manejarAcierto(i, j) {
+  // Marcar las celdas en la matriz
+  const marcador = PARTIDA.turno === 1 ? 'X' : 'O';
+  PARTIDA.matriz[i][j] = marcador;
+  PARTIDA.matriz[PARTIDA.tempI][PARTIDA.tempJ] = marcador;
+  console.table(PARTIDA.matriz); // Para debug en consola
+
+  // Incrementar puntos del jugador actual
+  if (PARTIDA.turno === 1) {
+    PARTIDA.puntosPlayer1++;
+  } else {
+    PARTIDA.puntosPlayer2++;
+  }
+
+  // Actualizar la visualización de puntos
+  actualizarPuntos();
+
+  // Bloquear las celdas acertadas
+  bloquearCelda(PARTIDA.numUno);
+  bloquearCelda(PARTIDA.numDos);
+
+  alert('Bien Hecho! +1 punto!');
+
+  // Verificar si el juego ha terminado
+  verificarFinJuego();
+}
+
+/**
+ * Maneja el caso cuando el jugador falla
+ * @param {HTMLElement} tituloPlayer - Elemento del título del jugador
+ */
+function manejarFallo(tituloPlayer) {
+  console.log('Casi!');
   
+  // Voltear las cartas de vuelta después de un breve delay
+  setTimeout(() => {
+    PARTIDA.numUno.classList.toggle('flipped');
+    PARTIDA.numDos.classList.toggle('flipped');
+  }, CONFIG.TIEMPO_VOLTEAR_FALLO);
+
+  // Cambiar de turno
+  cambiarTurno();
+  
+  // Actualizar el título del turno
+  setTimeout(() => {
+    actualizarTituloTurno(tituloPlayer);
+  }, CONFIG.TIEMPO_VOLTEAR_FALLO);
+}
+
+/**
+ * Bloquea una celda para que no se pueda volver a clickear
+ * @param {HTMLElement} celda - Elemento de la celda a bloquear
+ */
+function bloquearCelda(celda) {
+  celda.dataset.locked = 'true';
+  celda.classList.add('locked');
+}
+
+/**
+ * Reinicia las variables del turno actual
+ */
+function resetearTurno() {
+  PARTIDA.contador = 1;
+  PARTIDA.numUno = null;
+  PARTIDA.numDos = null;
+}
+
+/**
+ * Cambia el turno al otro jugador
+ */
+function cambiarTurno() {
+  PARTIDA.turno = PARTIDA.turno === 1 ? 2 : 1;
+}
+
+// ==========================================
+// FUNCIONES DE ACTUALIZACIÓN DE UI
+// ==========================================
+
+/**
+ * Actualiza el título mostrando el jugador del turno actual
+ * @param {HTMLElement} tituloPlayer - Elemento del título a actualizar
+ */
+function actualizarTituloTurno(tituloPlayer) {
+  tituloPlayer.innerHTML = `Player ${PARTIDA.turno}`;
+}
+
+/**
+ * Actualiza la visualización de los puntos de ambos jugadores
+ */
+function actualizarPuntos() {
+  const puntos1 = document.querySelector('#puntos1');
+  const puntos2 = document.querySelector('#puntos2');
+
+  puntos1.innerHTML = `Player 1: ${PARTIDA.puntosPlayer1}`;
+  puntos2.innerHTML = `Player 2: ${PARTIDA.puntosPlayer2}`;
+}
+
+/**
+ * Muestra una celda temporalmente al inicio del juego
+ * @param {HTMLElement} flipContainer - Contenedor de la celda
+ */
+function mostrarCeldaTemporalmente(flipContainer) {
   flipContainer.classList.toggle('flipped');
+  
   setTimeout(() => {
     flipContainer.classList.toggle('flipped');
-  }, 2500);
-
+  }, CONFIG.TIEMPO_MOSTRAR_CELDAS);
 }
 
+// ==========================================
+// FUNCIONES DE CONTROL DEL JUEGO
+// ==========================================
 
-
-
-function checkPuntos(puntosPlayer1,puntosPlayer2){
-  //El maximo de puntos al final debe ser ->18
-  const maxPuntos = 18;
+/**
+ * Pregunta al usuario si quiere comenzar el juego
+ * @returns {boolean} - true si acepta, redirige si no
+ */
+function comenzarJuego() {
+  const respuesta = confirm('Comenzar el juego?');
   
-  if(puntosPlayer1+puntosPlayer2 >= maxPuntos){
+  if (!respuesta) {
+    window.location.hash = '#';
+    return false;
+  }
+  
+  return true;
+}
+
+/**
+ * Verifica si el juego ha terminado y maneja el final
+ */
+function verificarFinJuego() {
+  const puntosTotal = PARTIDA.puntosPlayer1 + PARTIDA.puntosPlayer2;
+  // Calcular el máximo de puntos según el tamaño del tablero
+  const maxPuntos = (PARTIDA.tamanoSeleccionado * PARTIDA.tamanoSeleccionado) / 2;
+  
+  if (puntosTotal >= maxPuntos) {
     console.log('Fin del Juego');
     alert('El juego ha acabado!!');
-    if(confirm('Quieres jugar de nuevo?')){
-      resetTodo();
+    
+    if (confirm('Quieres jugar de nuevo?')) {
+      resetearPartida();
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-    }else{
+    } else {
       setTimeout(() => {
         window.location.href = "/";
       }, 1000);
-
     }
-    
   }
-
 }
 
-function resetTodo(){
-   turno = 1;
-   contador=1;
-   numUno;
-   numDos;
-   puntosPlayer1=0;
-   puntosPlayer2=0;
+/**
+ * Reinicia todas las variables de la partida
+ */
+function resetearPartida() {
+  PARTIDA.turno = 1;
+  PARTIDA.contador = 1;
+  PARTIDA.numUno = null;
+  PARTIDA.numDos = null;
+  PARTIDA.tempI = null;
+  PARTIDA.tempJ = null;
+  PARTIDA.puntosPlayer1 = 0;
+  PARTIDA.puntosPlayer2 = 0;
+  PARTIDA.matriz = [];
+  PARTIDA.tamanoSeleccionado = null;
 }
-
-function logicaGame(){
-  //Logica del juego hacia abajo... algún dia
-  
-  
-  
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-//Funcion que muestra un popup
-function mostrarMensaje(texto, duracion = 2000) {
-  const msg = document.getElementById('mensaje');
-  msg.textContent = texto;
-  msg.classList.add('show');
-  setTimeout(() => msg.classList.remove('show'), duracion);
-}
-//Llamada al popup
-mostrarMensaje("Flip bloqueado 😎", 1500);
-*/
