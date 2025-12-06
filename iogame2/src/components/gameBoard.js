@@ -37,6 +37,18 @@ class GameBoard extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.agregarEventoBotonJuego();
+  }
+
+  agregarEventoBotonJuego() {
+    const botonJuego = document.getElementById('botonJuego');
+    if (botonJuego) {
+      botonJuego.addEventListener('click', () => {
+        if (window.location.hash === '#game') {
+          this.render();
+        }
+      });
+    }
   }
 
   render() {
@@ -83,6 +95,7 @@ class GameBoard extends HTMLElement {
     this.juegoContainer.innerHTML = '';
     PARTIDA.tamanoSeleccionado = tamano;
     PARTIDA.matriz = generarMatrizJuego(tamano);
+    console.table(PARTIDA.matriz);
     
     actualizarGridJuego(this.juegoContainer, tamano);
     this.renderizarCeldas();
@@ -110,7 +123,7 @@ class GameBoard extends HTMLElement {
         }, 500);
 
         this.agregarEventoClick(flipContainer, i, j);
-        PARTIDA.matriz[i][j] = flipContainer;
+        PARTIDA.elementosDom[`${i},${j}`] = flipContainer;
         this.juegoContainer.appendChild(flipContainer);
       });
     });
@@ -248,6 +261,7 @@ class GameBoard extends HTMLElement {
       resetearPartidaState();
       PARTIDA.tamanoSeleccionado = this.dificultadActual;
       PARTIDA.matriz = generarMatrizJuego(this.dificultadActual);
+      console.table(PARTIDA.matriz);
       
       actualizarGridJuego(this.juegoContainer, this.dificultadActual);
       this.renderizarCeldas();

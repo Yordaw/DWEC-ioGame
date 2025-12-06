@@ -27,11 +27,11 @@ class HomePage extends HTMLElement {
           <hr class="my-4">
           
           <div class="text-start">
-            <h3>📖 Instrucciones de Juego</h3>
+            <h3>* Instrucciones del Juego *</h3>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><strong>Elige tamaño/dificultad:</strong> Van ligados entre sí según el modo elegido.</li>
-              <li class="list-group-item"><strong>Memorización inicial:</strong> Cuando empieza el juego se girarán las celdas durante un breve periodo. ¡Fíjate y memoriza las posiciones de cada número! Intenta acordarte de todas y ganarás. Luego vuelven a la normalidad y ahí es cuando realmente comienza los turnos de ambos jugadores.</li>
-              <li class="list-group-item"><strong>Turnos:</strong> Si aciertas sigue tu turno. Si fallas, cambia.</li>
+              <li class="list-group-item"><strong>Memorización inicial:</strong> Cuando empieza el juego se girarán las celdas durante un breve periodo. ¡Fíjate y memoriza las posiciones de cada número! Intenta acordarte de todas y ganarás. Luego vuelven a la normalidad y ahí es cuando realmente comienzan los turnos de ambos jugadores.</li>
+              <li class="list-group-item"><strong>Turnos:</strong> Si aciertas sigue tu turno. Si fallas le toca a tu contrincante.</li>
               <li class="list-group-item"><strong>Victoria:</strong> Cuando se acierten todas las posiciones, se acaba el juego y gana el que más puntos tenga.</li>
             </ul>
           </div>

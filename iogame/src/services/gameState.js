@@ -46,6 +46,7 @@ export const PARTIDA = {
   puntosPlayer1: 0,
   puntosPlayer2: 0,
   matriz: [],
+  elementosDom: {},
   tamanoSeleccionado: null
 };
 
@@ -73,6 +74,7 @@ export function resetearPartidaState() {
   PARTIDA.puntosPlayer1 = 0;
   PARTIDA.puntosPlayer2 = 0;
   PARTIDA.matriz = [];
+  PARTIDA.elementosDom = {};
   PARTIDA.tamanoSeleccionado = null;
   
   turnoObservable.cambiarValor(1);

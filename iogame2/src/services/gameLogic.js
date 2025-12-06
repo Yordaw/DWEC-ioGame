@@ -90,6 +90,7 @@ export function manejarAcierto(i, j) {
   const marcador = PARTIDA.turno === 1 ? 'X' : 'O';
   PARTIDA.matriz[i][j] = marcador;
   PARTIDA.matriz[PARTIDA.tempI][PARTIDA.tempJ] = marcador;
+  console.table(PARTIDA.matriz);
 
   if (PARTIDA.turno === 1) {
     PARTIDA.puntosPlayer1++;
