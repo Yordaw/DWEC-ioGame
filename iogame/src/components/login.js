@@ -13,9 +13,9 @@ class LoginPage extends HTMLElement {
       <div class="container mt-5">
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <h2 class="card-title text-center">Iniciar Sesión</h2>
+            <div class="form-container">
+              <div class="form-box">
+                <h2 class="form-title">Iniciar Sesión</h2>
                 <div class="alert alert-info" role="alert">
                   <strong>Usuario de prueba:</strong><br>
                   Email: <code>lomeded178@httpsu.com</code><br>
@@ -37,7 +37,7 @@ class LoginPage extends HTMLElement {
                 </form>
               </div>
             </div>
-            <h2 class="card-title text-center" id="resultadoLogin"></h2>
+            <h2 class="form-title" id="resultadoLogin"></h2>
           </div>
         </div>
       </div>

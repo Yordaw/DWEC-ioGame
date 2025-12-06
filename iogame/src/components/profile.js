@@ -51,16 +51,16 @@ class ProfilePage extends HTMLElement {
     const container = document.createElement('div');
     container.setAttribute('class', 'container mt-5');
 
-    //crear tarjeta
-    const card = document.createElement('div');
-    card.setAttribute('class', 'card mx-auto');
-    card.style.maxWidth = '500px';
+    //crear tarjeta personalizada
+    const formContainer = document.createElement('div');
+    formContainer.setAttribute('class', 'form-container mx-auto');
+    formContainer.style.maxWidth = '500px';
 
-    const cardBody = document.createElement('div');
-    cardBody.setAttribute('class', 'card-body');
+    const formBox = document.createElement('div');
+    formBox.setAttribute('class', 'form-box');
 
     const titulo = document.createElement('h2');
-    titulo.setAttribute('class', 'card-title');
+    titulo.setAttribute('class', 'form-title');
     titulo.innerHTML = 'Mi Perfil';
 
     //crear formulario
@@ -96,9 +96,9 @@ class ProfilePage extends HTMLElement {
 
     botonesDiv.append(btnGuardar, btnVolver);
 
-    cardBody.append(titulo, form, botonesDiv);
-    card.appendChild(cardBody);
-    container.appendChild(card);
+    formBox.append(titulo, form, botonesDiv);
+    formContainer.appendChild(formBox);
+    container.appendChild(formContainer);
 
     this.innerHTML = '';
     this.appendChild(container);

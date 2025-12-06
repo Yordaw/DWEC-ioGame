@@ -45,7 +45,10 @@ export function crearAreaPuntos() {
   const puntos1 = crearElementoPuntos('puntos1', 'Player 1', 0);
   const puntos2 = crearElementoPuntos('puntos2', 'Player 2', 0);
 
-  areaPuntos.append(tituloPuntos, puntos1, puntos2);
+  //boton reset de la partida
+  const btnReset = crearBotonReset();
+
+  areaPuntos.append(tituloPuntos, puntos1, puntos2, btnReset);
   
   return areaPuntos;
 }
@@ -139,10 +142,20 @@ export function actualizarPuntosUI(puntos1, puntos2) {
   if (element2) element2.innerHTML = `Player 2: ${puntos2}`;
 }
 
-//crea botón reiniciar
+//boton reset de la partida. Este es el que esta debajo de los puntos para resetear la partida y los numeros.
+export function crearBotonReset() {
+  const boton = document.createElement('button');
+  boton.setAttribute('class', 'btn btn-danger btn-lg');
+  boton.setAttribute('id', 'btnReset');
+  boton.innerHTML = 'Reset';
+  return boton;
+}
+
+//crea botón reiniciar. Este sale al final de una partida, cuando se gana.
 export function crearBotonReiniciar(callback) {
   const boton = document.createElement('button');
   boton.setAttribute('class', 'btn btn-warning btn-lg');
+  boton.setAttribute('id', 'btnResetFinJuego');
   boton.innerHTML = 'Reiniciar';
   boton.addEventListener('click', callback);
   return boton;

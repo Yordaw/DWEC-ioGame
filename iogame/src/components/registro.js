@@ -16,9 +16,9 @@ class RegistroPage extends HTMLElement {
       <div class="container mt-5">
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <h2 class="card-title text-center">Registro Nuevo Usuario</h2>
+            <div class="form-container">
+              <div class="form-box">
+                <h2 class="form-title">Registro Nuevo Usuario</h2>
                 <form id="registroForm">
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
@@ -35,7 +35,7 @@ class RegistroPage extends HTMLElement {
                 </form>
               </div>
             </div>
-            <h2 class="card-title text-center" id="resultadoRegistro"></h2>
+            <h2 class="form-title" id="resultadoRegistro"></h2>
           </div>
         </div>
       </div>

@@ -86,6 +86,12 @@ class GameBoard extends HTMLElement {
     
     actualizarGridJuego(this.juegoContainer, tamano);
     this.renderizarCeldas();
+
+    //boton reset de la partida
+    const btnReset = document.querySelector('#btnReset');
+    if (btnReset) {
+      btnReset.addEventListener('click', () => this.reiniciarPartidaDirecta());
+    }
   }
 
   renderizarCeldas() {
@@ -201,6 +207,7 @@ class GameBoard extends HTMLElement {
     
     const btnVolver = document.createElement('button');
     btnVolver.setAttribute('class', 'btn btn-secondary btn-lg');
+    btnVolver.setAttribute('id', 'btnVolverFinalJuego');
     btnVolver.innerHTML = 'Volver al Menu';
     btnVolver.addEventListener('click', () => {
       window.location.hash = '#';
@@ -232,6 +239,19 @@ class GameBoard extends HTMLElement {
     }
     
     return true;
+  }
+
+  //boton reset de la partida
+  reiniciarPartidaDirecta() {
+    if (this.dificultadActual) {
+      this.juegoContainer.innerHTML = '';
+      resetearPartidaState();
+      PARTIDA.tamanoSeleccionado = this.dificultadActual;
+      PARTIDA.matriz = generarMatrizJuego(this.dificultadActual);
+      
+      actualizarGridJuego(this.juegoContainer, this.dificultadActual);
+      this.renderizarCeldas();
+    }
   }
 
   suscribirseAObservables() {
