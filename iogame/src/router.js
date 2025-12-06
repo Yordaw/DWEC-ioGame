@@ -1,22 +1,29 @@
-import { renderContentForOne } from "./components/contentForOne.js";
-import { renderLogin } from "./components/login.js";
-import { renderRegistro } from "./components/registro.js";
-import { renderHome } from "./components/home.js";
+//router basado en Web Components para navegación
+import { GameBoard } from './components/gameBoard.js';
+import { LoginPage } from './components/login.js';
+import { RegistroPage } from './components/registro.js';
+import { HomePage } from './components/home.js';
+import { ProfilePage } from './components/profile.js';
 
-export { router };
+//mapa de rutas a Web Components
 const routes = new Map([
-    ['', renderHome],
-    ['#', renderHome],
-    ['#game', renderContentForOne],
-    ['#login', renderLogin],
-    ['#registro', renderRegistro]
+  ['', HomePage],
+  ['#', HomePage],
+  ['#game', GameBoard],
+  ['#login', LoginPage],
+  ['#registro', RegistroPage],
+  ['#perfil', ProfilePage]
 ]);
 
-function router(route,container){
-    if(routes.has(route)){
-        container.replaceChildren(routes.get(route)());
-    }
-    else {
-        container.innerHTML = `<h2>404 - Página no encontrada</h2>`
-    }
+//renderiza un Web Component basado en la ruta
+export function router(route, container) {
+  const ComponentClass = routes.get(route);
+  
+  if (ComponentClass) {
+    //crear instancia del Web Component
+    const component = new ComponentClass();
+    container.replaceChildren(component);
+  } else {
+    container.innerHTML = `<h2>404 - Página no encontrada</h2>`;
+  }
 }
