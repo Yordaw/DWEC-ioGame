@@ -5,7 +5,8 @@ Proyecto Juego ioGame asignatura DWEC DAW2
 
 ## 1. Descripción General
 
-Es un juego de memoria estilo clásico para dos jugadores por turnos. El objetivo es encontrar parejas de números en un tablero, pero con una diferencia: antes de empezar, todas las tarjetas se revelan brevemente para que memorices las posiciones. Luego los jugadores van descubriendo parejas por turnos. Quien acumule más puntos gana. Incluye autenticación de usuarios, sistema de perfiles y diferentes niveles de dificultad.
+Es un juego de memoria estilo clásico para dos jugadores por turnos. El objetivo es encontrar parejas de números en un tablero. Antes de empezar, todas las tarjetas se revelan brevemente para que memorices las posiciones. Luego los jugadores van descubriendo parejas por turnos. Quien acumule más puntos gana. 
+Incluye autenticación de usuarios, sistema de perfiles y diferentes niveles de dificultad.
 
 ## 2. Tecnologías Utilizadas
 
@@ -14,7 +15,7 @@ Es un juego de memoria estilo clásico para dos jugadores por turnos. El objetiv
 - **Web Components:** Componentes reutilizables sin framework externo
 - **Estilos:** SCSS (CSS con superpoderes) + Bootstrap 5
 - **Control de Estado:** Sistema custom con observables
-- **Diseño:** Responsive con flexbox y CSS Grid
+- **Diseño:** Con flexbox y CSS Grid
 - **Herramientas:** ESLint para mantener el código limpio
 
 ## 3. Estructura del Proyecto
@@ -62,8 +63,10 @@ iogame2/
 | **Gris Casi Blanco** | `#CCCCCC` | Texto principal, links |
 | **Blanco** | `#FFFFFF` | Texto sobre rojo, fondos de tarjetas al voltear |
 
-**Resumen:** Tema oscuro con acentos en rojo neón. Muy gamer, muy de esos juegos retro pero modernos.
+**Resumen:** Tema oscuro con acentos en rojo neón. 
 
+![Pantalla Home](./iogame2/src/images/1.png)
+![Seleccion Dificultad](./iogame2/src/images/2.png)
+![Celdas Cubiertas](./iogame2/src/images/3.png)
+![Celdas Descubiertas](./iogame2/src/images/4.png)
 ---
-
-*Proyecto realizado como práctica de JavaScript vanilla con componentes web modernos.*
