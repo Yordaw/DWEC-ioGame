@@ -24,6 +24,9 @@ function renderHeader() {
                 
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
+                        <a class="nav-link" href="#perfil" data-link id="botonPerfil" hidden>Mi Perfil</a>
+                    </li>
+                    <li class="nav-item">
                         <button class="btn btn-danger btn-lg ms-2" id="botonLogout" hidden>Logout</button>
                     </li>
                 </ul>
@@ -31,16 +34,16 @@ function renderHeader() {
         </div>
     </nav>    
     `;
-    //Revisamos si hay token guardado(se está logeado) para poder ocultar o mostrar el ciertas opciones del header.
-    //Verificar estado inicial
+    //revisar si hay token guardado (logeado) para mostrar/ocultar opciones
+    //verificar estado inicial
     refreshHeader(header);
 
-    //Escuchar cambios en el almacenamiento
+    //escuchar cambios en el almacenamiento
     window.addEventListener('storage', () => {
         refreshHeader(header);
     });
 
-    //También escuchar eventos personalizados para cambios dentro de la misma pestaña
+    //escuchar eventos personalizados para cambios en la misma pestaña
     window.addEventListener('authStateChanged', () => {
         refreshHeader(header);
     });
@@ -49,7 +52,7 @@ function renderHeader() {
 
     botonLogout.addEventListener('click', () => {
         localStorage.removeItem("access_token");
-        //Disparar evento personalizado
+        //disparar evento personalizado
         window.dispatchEvent(new Event('authStateChanged'));
         window.location.hash = '#login';
         refreshHeader(header);
@@ -64,22 +67,24 @@ function refreshHeader(header) {
     const token = localStorage.getItem("access_token");
     const botonLogout = header.querySelector('#botonLogout');
     const botonJuego = header.querySelector('#botonJuego');
+    const botonPerfil = header.querySelector('#botonPerfil');
     const loginLink = header.querySelector('a[href="#login"]');
     const registroLink = header.querySelector('a[href="#registro"]');
 
     if (token) {
-        //Usuario logeado
+        //usuario logeado
         botonLogout.removeAttribute("hidden");
         botonJuego.removeAttribute("hidden");
+        botonPerfil.removeAttribute("hidden");
         loginLink.parentElement.style.display = 'none';
         registroLink.parentElement.style.display = 'none';
     } else {
-        //Usuario no logeado
+        //usuario no logeado
         botonJuego.setAttribute("hidden", true);
         botonLogout.setAttribute("hidden", true);
+        botonPerfil.setAttribute("hidden", true);
         loginLink.parentElement.style.display = 'block';
         registroLink.parentElement.style.display = 'block';
     }
 }
-
 
