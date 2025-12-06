@@ -1,0 +1,190 @@
+// Import all of Bootstrap's CSS
+@import "bootstrap/scss/bootstrap";
+
+//import * as bootstrap from 'bootstrap'
+
+// -- PALETA DE COLORES -- //
+/*
+Naranja #C5630C -> Titulo juego
+Beige/Crema #A47F6F ->
+VerdeLigero #415057 -> Fondo areaTablero
+GrisOscuro #33353A -> Borde areaTablero
+VerdeOscuro #1A1F24 ->
+VerdeCyprus #004643 -> Fondo areaTablero
+GrisSandDune #F0EDE5 ->
+CasiNegro #060A0D -> Fondo tablero
+*/
+
+// CSS Personalizado para el main
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#main{
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+#tituloJuego{
+    margin: 20px 0px 0px 0px;
+    font-family: 'Impact','Tahoma';
+    font-size: 60px;
+    text-align: center;
+    color: #C5630C;
+    text-shadow: 2px 2px 17px rgb(0, 0, 0);
+}
+
+#areaTablero{
+    //border: 2px solid red;
+    //background-color: #1A1F24;
+    margin: 50px 0px 50px 0px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:space-around;
+    padding: 50px;
+    //border: 5px solid #33353A;
+    border-radius: 15px;
+    position: relative;
+}
+
+#areaPuntos{
+  //border: 2px solid red;
+  width: 200px;
+  height: 150px;
+  position: absolute;
+  top: 40px;
+  left: 140px;
+}
+
+#tituloPuntos{
+  font-family: 'Impact','Tahoma';
+  text-align: center;
+  padding: 5px;
+  background-color: #9c8b7c;
+  color: rgb(211, 211, 211);
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px #9c8b7c;
+  text-shadow: 2px 2px 10px #3d3731;
+  font-weight: bold;
+}
+
+.puntos{
+  text-align: center;
+  padding: 5px;
+  font-family: 'Impact','Tahoma';
+  text-shadow: 2px 2px 10px #838383;
+  color: #C5630C;
+}
+
+.tablero{
+    //background-color: #060A0D;
+    background-color: #9c8b7c;
+    margin: 5px 5px 5px 5px;
+    height: 600px;
+    width: 600px;
+    padding: 30px;
+    //border: 5px solid #756353;
+    outline: 20px solid #756353;
+    border-radius: 15px;
+    //box-shadow: 5px 5px 15px #000000;
+    box-shadow: 5px 5px 15px #9c8b7c;
+}
+
+#tablUno h2{
+    text-align: center;
+    font-weight: bold;
+    color:#ff7700;
+    text-shadow: 2px 2px 17px rgb(0, 0, 0);
+}
+
+#tablDos h2{
+    text-align: center;
+    font-weight: bold;
+    color: rgb(255, 230, 0);
+}
+
+.juego{
+    margin-left: 15px;
+    display: grid;            
+    width: 500px;
+    height: 500px;
+
+    grid-template-columns: repeat(6, 1fr); 
+    grid-template-rows: repeat(6, 1fr);
+    //border: 5px solid #C5630C;
+    border-radius: 10px;
+}
+
+//Estilos para el flip
+.flip-container {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.flip-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  
+}
+
+.flip-container.flipped .flip-card {
+  transform: rotateY(180deg);
+}
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-front {
+  background-color: #766553;
+  border: 1px solid #766553;
+  
+}
+
+.flip-back {  
+  background-color: #006b47;
+  border: 1px solid #006b2d;
+  transform: rotateY(180deg);
+}
+
+//Clase para bloqear las tarjetas acertadas.
+.locked {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+
+/*
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #333;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .popup.show {
+    opacity: 1;
+  }
+  */

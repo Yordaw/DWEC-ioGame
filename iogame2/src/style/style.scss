@@ -1,0 +1,566 @@
+// Import all of Bootstrap's CSS
+@import "bootstrap/scss/bootstrap";
+
+//import * as bootstrap from 'bootstrap'
+
+// CSS Personalizado para el main
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0F0F0F;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+#main{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    vertical-align: middle;
+    min-height: 100vh;
+}
+
+#tituloJuego{
+    margin: 30px 0px 20px 0px;
+    font-family: 'Impact', 'Tahoma', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    text-align: center;
+    color: #FF3D47;
+    letter-spacing: 3px;
+    text-shadow: 0px 0px 20px rgba(255, 61, 71, 0.6);
+}
+
+#areaTablero{
+    margin: 30px auto;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px 30px;
+    border-radius: 20px;
+    position: relative;
+    max-width: 1400px;
+}
+
+#areaPuntos{
+  width: 220px;
+  height: 160px;
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  background: #1A1A1A;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(255, 61, 71, 0.25);
+  border-left: 4px solid #FF3D47;
+}
+
+#tituloPuntos{
+  font-family: 'Impact','Tahoma', sans-serif;
+  text-align: center;
+  padding: 8px;
+  background-color: #FF3D47;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(255, 61, 71, 0.4);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  font-size: 20px;
+  //font-weight: bold;
+}
+
+.puntos{
+  text-align: center;
+  padding: 8px;
+  font-family: 'Impact','Tahoma', sans-serif;
+  text-shadow: none;
+  color: #FF3D47;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.tablero{
+    background: #1A1A1A;
+    margin: 0;
+    height: 600px;
+    width: 600px;
+    padding: 30px;
+    border: none;
+    outline: 3px solid #FF3D47;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(255, 61, 71, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tablero:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(255, 61, 71, 0.3);
+}
+
+#tablUno h2{
+    text-align: center;
+    font-weight: bold;
+    color: #FF3D47;
+    text-shadow: 0px 0px 10px rgba(255, 61, 71, 0.5);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+#tablDos h2{
+    text-align: center;
+    font-weight: bold;
+    color: #FF3D47;
+    text-shadow: 0px 0px 10px rgba(255, 61, 71, 0.5);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.juego{
+    margin-left: 15px;
+    display: grid;            
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+}
+
+//Grid específico para cada tamaño de tablero
+.juego.grid-4 {
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.juego.grid-6 {
+    grid-template-columns: repeat(6, 1fr); 
+    grid-template-rows: repeat(6, 1fr);
+}
+
+.juego.grid-8 {
+    grid-template-columns: repeat(8, 1fr); 
+    grid-template-rows: repeat(8, 1fr);
+}
+
+//cambiamos el tamaño de la letra en funcion del tamaño de las celdas (va al reves realmente)
+.juego.grid-4 .textoCeldas {
+  margin-top: 15px;
+  font-size: 60px !important;
+}
+
+.juego.grid-6 .textoCeldas {
+  margin-top: 15px;
+  font-size: 50px !important;
+}
+
+.juego.grid-8 .textoCeldas {
+  margin-top: 15px;
+  font-size: 40px !important;
+}
+
+.contenedor-dificultad {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 50px 40px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.boton-dificultad {
+  padding: 18px 50px;
+  font-weight: 700;
+  background-color: #1A1A1A;
+  color: #FF3D47;
+  border: 2px solid #FF3D47;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 320px;
+  box-shadow: 0 4px 12px rgba(255, 61, 71, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &:hover {
+    background-color: #FF3D47;
+    color: #000000;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 61, 71, 0.4);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+.nombre-dificultad {
+  font-size: 1.9rem;
+  margin: 0;
+}
+
+.descripcion-dificultad {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+//Estilos para el flip
+.flip-container {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  padding: 3px;
+}
+
+.flip-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flip-container.flipped .flip-card {
+  transform: rotateY(180deg);
+}
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: 2px solid #4A4A4A;
+}
+
+.flip-front {
+  background-color: #2A2A2A;
+  border: 2px solid #FF3D47;
+  color: #FF3D47;
+  font-family: 'Impact', 'Tahoma', sans-serif;
+  text-shadow: 0px 0px 10px rgba(255, 61, 71, 0.4);
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.flip-back {  
+  background: linear-gradient(135deg, #FF3D47 0%, #E63342 100%);
+  border: 2px solid #CC2D35;
+  transform: rotateY(180deg);
+  color: #ffffff;
+  font-family: 'Impact', 'Tahoma', sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.flip-back .textoCeldas {
+  color: #ffffff !important;
+}
+
+
+//Clase para bloqear las tarjetas que ya estan acertadas
+.locked {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: grayscale(40%);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////// APROVECHAMIENTO DE BOOTSTRAP Y FORZADO DE COLORES ///////////////////////////////////////////////////////////////
+//Aqui lo que pasa es que recojo algunas cosas que ya tienen estilo que le da el bootstrap y aprovecho sus formas, tamaños, paddings, y todo lo que da extrucutra etc...
+// ... y solo cambio los colores a la fuerza porque no me gustan. Es decir, me aprovecho del boostrap un poco y luego cambio cosas. 
+
+
+//Navbar Bootstrap
+.navbar {
+  background-color: #1A1A1A !important; 
+  border-bottom: 2px solid #FF3D47 !important;
+  box-shadow: 0 2px 10px rgba(255, 61, 71, 0.2);
+}
+
+.navbar-brand {
+  color: #FF3D47 !important;
+  font-weight: 900;
+  font-size: 24px;
+  text-shadow: 0px 0px 8px rgba(255, 61, 71, 0.5) !important;
+}
+
+.nav-link {
+  color: #CCCCCC !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: #FF3D47 !important;
+    text-shadow: 0px 0px 5px rgba(255, 61, 71, 0.4);
+  }
+}
+
+.btn-danger {
+  background-color: #FF3D47 !important;
+  border-color: #CC2D35 !important;
+  color: #000000 !important;
+  font-weight: 700;
+  
+  &:hover {
+    background-color: #E63342 !important;
+    box-shadow: 0 0 15px rgba(255, 61, 71, 0.5) !important;
+  }
+}
+
+//Footer Bootstrap
+footer {
+  background-color: #1A1A1A !important;
+  border-top: 2px solid #FF3D47 !important;
+  color: #CCCCCC !important;
+}
+
+.footer-custom {
+  background-color: #1A1A1A;
+  border-top: 2px solid #FF3D47;
+  padding: 30px 20px;
+  margin-top: 60px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-text {
+  color: #CCCCCC;
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-link {
+  color: #CCCCCC;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: #FF3D47;
+    text-shadow: 0px 0px 5px rgba(255, 61, 71, 0.4);
+  }
+}
+
+.text-muted {
+  color: #CCCCCC !important;
+}
+
+//formularios y inputs
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  background-color: #2A2A2A !important;
+  border: 2px solid #FF3D47 !important;
+  color: #FFFFFF !important;
+  
+  &:focus {
+    background-color: #333333 !important;
+    border-color: #FF6B6B !important;
+    box-shadow: 0 0 10px rgba(255, 61, 71, 0.3) !important;
+  }
+  
+  &::placeholder {
+    color: #888888;
+  }
+}
+
+.form-label {
+  color: #FF3D47 !important;
+  font-weight: 700;
+}
+
+//Botones Bootstrap
+.btn {
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #FF3D47 !important;
+  border-color: #CC2D35 !important;
+  color: #000000 !important;
+  
+  &:hover {
+    background-color: #E63342 !important;
+    box-shadow: 0 0 15px rgba(255, 61, 71, 0.5) !important;
+  }
+}
+
+.btn-secondary {
+  background-color: #444444 !important;
+  border-color: #555555 !important;
+  color: #FF3D47 !important;
+  
+  &:hover {
+    background-color: #555555 !important;
+    box-shadow: 0 0 10px rgba(255, 61, 71, 0.3) !important;
+  }
+}
+
+//Contenedores generales
+.container,
+.container-fluid {
+  background-color: transparent;
+}
+
+//Tablas por si las hay en un futuro
+/*
+table {
+  color: #CCCCCC;
+  border-color: #FF3D47;
+}
+
+thead {
+  background-color: #1A1A1A;
+  color: #FF3D47;
+  border-bottom: 2px solid #FF3D47;
+}
+
+tbody tr {
+  border-bottom: 1px solid #333333;
+  
+  &:hover {
+    background-color: rgba(255, 61, 71, 0.1);
+  }
+}
+*/
+
+// Alertas
+.alert {
+  background-color: #2A2A2A !important;
+  border: 2px solid #FF3D47 !important;
+  color: #CCCCCC !important;
+}
+
+.alert-danger {
+  background-color: #3A1A1A !important;
+  border-color: #FF3D47 !important;
+  color: #FF6B6B !important;
+}
+
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-box {
+  background-color: #1A1A1A;
+  border: 2px solid #FF3D47;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(255, 61, 71, 0.2);
+}
+
+.form-title {
+  text-align: center;
+  color: #FF3D47;
+  font-weight: 900;
+  font-size: 28px;
+  margin-bottom: 30px;
+  text-shadow: 0px 0px 10px rgba(255, 61, 71, 0.3);
+}
+
+.card {
+  background-color: #1A1A1A !important;
+  border: 2px solid #FF3D47 !important;
+  border-radius: 15px !important;
+  box-shadow: 0 8px 32px rgba(255, 61, 71, 0.2) !important;
+}
+
+.card-body {
+  background-color: #1A1A1A !important;
+}
+
+.card-title {
+  color: #FF3D47 !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+  text-shadow: 0px 0px 10px rgba(255, 61, 71, 0.3) !important;
+}
+
+//mas cosas del boostrap...
+.jumbotron {
+  background-color: transparent !important;
+  color: #CCCCCC !important;
+}
+
+.jumbotron h1 {
+  color: #FF3D47 !important;
+  text-shadow: 0px 0px 15px rgba(255, 61, 71, 0.5) !important;
+  font-weight: 900;
+}
+
+.jumbotron p {
+  color: #CCCCCC !important;
+}
+
+.jumbotron hr {
+  border-color: #FF3D47 !important;
+  opacity: 0.5;
+}
+
+.jumbotron h3 {
+  color: #FF3D47 !important;
+  text-shadow: 0px 0px 10px rgba(255, 61, 71, 0.3) !important;
+  font-weight: 900;
+  margin-top: 30px;
+}
+
+.list-group {
+  background-color: transparent !important;
+}
+
+.list-group-item {
+  background-color: #1A1A1A !important;
+  border: 1px solid #FF3D47 !important;
+  color: #CCCCCC !important;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.list-group-item strong {
+  color: #FF3D47 !important;
+  font-weight: 900;
+}
+
+.text-center {
+  color: #CCCCCC !important;
+}
+
+#btnReset{
+  margin-top: 20px;
+  width: 100%;
+}
+
+#btnResetFinJuego{
+  margin-top: 20px;
+  width: 400%;
+}
+
+#btnVolverFinalJuego{
+  margin-top: 20px;
+  width: 400%;
+}
